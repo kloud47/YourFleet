@@ -3,6 +3,7 @@ import { UserButton } from "@clerk/nextjs"
 import Image from "next/image"
 import Link from "next/link"
 import { HoverBorderGradient } from "../utils/hover-border-gradient"
+import { ModeToggle } from "../global/mode-toggle"
 
 type Props = {
     users?: null | User
@@ -31,7 +32,7 @@ export const Navbar = ({ users }: Props) => {
                         className="bg-primary text-white p-2 px-4 rounded-md hover:bg-primary shadow-lg"
                     >Login</Link>
                     {/* <UserButton /> */}
-                    {/* <ModeToggle /> */}
+                    <ModeToggle />
                 </aside>
             </div>
     )
