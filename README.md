@@ -8,3 +8,8 @@
   <li>npm install -g pnpm</li>
   <li>pnpm i</li>
 </ul>
+
+<h2>Note -> </h2>
+<p>
+  Dont push on main use Feature1 branch for now and don't forget to inform
+</p>
