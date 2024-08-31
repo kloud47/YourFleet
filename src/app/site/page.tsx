@@ -18,7 +18,9 @@ export default function Home() {
         </div>
         <p className="tracking-wider font-medium text-[#8c8e8d] animate-slidein opacity-0 [--slidein-delay:700ms]">in one place</p>
         <div className="flex justify-center items-center relative md:mt-[70px]">
-          <button className="button animate-slidein opacity-0 [--slidein-delay:900ms]">Get Started</button>
+          <Link href={'/agency'}>
+            <button className="button animate-slidein opacity-0 [--slidein-delay:900ms]">Get Started</button>
+          </Link>
           {/* <div className="bottom-0 top-[50%] bg-gradient-to-t dark:from-background left-0 right-0 absolute z-10"></div> */}
         </div>
       </section>

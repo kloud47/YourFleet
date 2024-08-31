@@ -6,7 +6,8 @@ import { ModeToggle } from "../global/mode-toggle"
 import { Button } from "../ui/button"
 
 type Props = {
-    users?: null | User
+    users?: null 
+    // | User
 }
 
 export const Navbar = ({ users }: Props) => {

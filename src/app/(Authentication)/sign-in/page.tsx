@@ -7,10 +7,12 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react"
 import { ChevronLeft } from "lucide-react";
 import GoogleButton from "react-google-button"
+import { useState } from "react";
 
 
 export default function () {
     const router = useRouter();
+    const [isLoading, setisLoading] = useState(false)
     // const [phone, setPhone] = useState<string>();
     // const [password, setPassword] = useState<string>();
     // const [error, setError] = useState<string>();
@@ -60,7 +62,14 @@ export default function () {
                         <div className="my-4 text-center">or</div>
 
                         <div className="mx-auto">
-                            <GoogleButton onClick={() => signIn('google')} />
+                            <GoogleButton 
+                                label={isLoading ? "Loading..." : "Sign in with Google"}
+                                disabled={isLoading} type="dark" 
+                                onClick={() => {
+                                    setisLoading(true)
+                                    signIn('google')
+                            }} 
+                            />
                         </div>
 
                         {/* < onClick={() => signIn('google')} /> */}
@@ -72,9 +81,9 @@ export default function () {
 
 
 
-                <div className="w-[50%] text-[#fff] italic bg-muted rounded-r-xl font-black text-[30px] flex flex-col justify-center">
+                <div className="w-[50%] text-[#fff] bg-muted rounded-r-xl text-lg font-thin text-[30px] flex flex-col justify-center">
                     <div className="ml-10">
-                    <h1>Welcome back</h1>
+                        <h1 className="text-center">Fleet is waiting for you...</h1>
                     </div>
                 </div>
             </div>
