@@ -1,8 +1,8 @@
-const Layout = async ({children}: {children: React.ReactNode}) => {
+
+export default function Layout({children}: {children: React.ReactNode}) {
     return (
-        <section>
+        <section className="flex">
             {children}
         </section>
     );
 }
-export default Layout;
