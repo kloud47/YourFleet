@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navigation/navbar"
+import { Navbar } from "@/components/navigation/Navbar/navbar"
 import React from "react"
 // import Providers from "../providers";
 

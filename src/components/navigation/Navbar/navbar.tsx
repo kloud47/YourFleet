@@ -1,16 +1,20 @@
 // import { ModeToggle } from "@/components/global/mode-toggle"
 import Image from "next/image"
 import Link from "next/link"
-import { HoverBorderGradient } from "../utils/hover-border-gradient"
-import { ModeToggle } from "../global/mode-toggle"
-import { Button } from "../ui/button"
+import { HoverBorderGradient } from "../../utils/hover-border-gradient"
+import { ModeToggle } from "../../global/mode-toggle"
+import { Button } from "../../ui/button"
+import { getServerSession } from "next-auth"
+import authOptions from "@/lib/authOptions"
+import UserProfile from "./user"
 
 type Props = {
     users?: null 
     // | User
 }
 
-export const Navbar = ({ users }: Props) => {
+export const Navbar = async ({ users }: Props) => {
+    const session = await getServerSession(authOptions)
     return (
             <div className="p-4 flex items-center justify-between relative z-40">
                 <aside className="flex items-center">
@@ -29,10 +33,16 @@ export const Navbar = ({ users }: Props) => {
                     </ul>
                 </HoverBorderGradient>
                 <aside className="flex gap-2 items-center">
-                    <Link href={'/sign-in'}
-                        className="bg-primary text-white p-2 px-4 rounded-md hover:bg-primary shadow-lg"
-                    >Login</Link>
+                    { !session &&
+                        (<Link href={'/sign-in'}
+                            className="bg-primary text-white p-2 px-4 rounded-md hover:bg-primary shadow-lg"
+                        >Login</Link>)
+                    }
                     {/* <UserButton /> */}
+                    {/* <div>
+                        <div>{session.user.name}</div>
+                    </div> */}
+                    <UserProfile />
                     <ModeToggle />
                 </aside>
             </div>
