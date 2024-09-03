@@ -11,9 +11,13 @@ import clsx from "clsx";
 import { Check, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-// import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+
+
 export default function Home() {
-  // const session = useSession();
+  const session = useSession();
+
+
   return (
     <>
       <section className="w-full pt-36 flex flex-col items-center justify-center ">
@@ -35,7 +39,7 @@ export default function Home() {
           in one place
         </p>
         <div className="flex justify-center items-center relative md:mt-[70px]">
-          <Link href={"/agency"}>
+          <Link href={session.data?.user ? `/agency`: `/sign-in`}>
             <button className="button animate-slidein opacity-0 [--slidein-delay:900ms]">
               Get Started
             </button>

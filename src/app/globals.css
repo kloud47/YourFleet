@@ -103,3 +103,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer base {
+  .BGFleet {
+    /* background-image:   linear-gradient(rgb(0, 158, 108, .9) 30%, rgb(156, 201, 187, .5)) , url("/Logo.png"); */
+    background-image:   radial-gradient(circle, #009E6C, rgb(156, 201, 187, .8), #91cab8 70%) , url("/Logo.png");
+  }
+}

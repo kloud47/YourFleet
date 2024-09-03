@@ -33,7 +33,7 @@ export const Navbar = async ({ users }: Props) => {
                     </ul>
                 </HoverBorderGradient>
                 <aside className="flex gap-2 items-center">
-                    { !session &&
+                    { !session?.user &&
                         (<Link href={'/sign-in'}
                             className="bg-primary text-white p-2 px-4 rounded-md hover:bg-primary shadow-lg"
                         >Login</Link>)
@@ -42,7 +42,7 @@ export const Navbar = async ({ users }: Props) => {
                     {/* <div>
                         <div>{session.user.name}</div>
                     </div> */}
-                    <UserProfile />
+                    {session && <UserProfile />}
                     <ModeToggle />
                 </aside>
             </div>
