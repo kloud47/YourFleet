@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -165,4 +165,30 @@ model Notification {
   @@index([agencyId])
   @@index([subAccountId])
   @@index([userId])
+}
+
+model Truck {
+  id        String   @id @default(cuid())
+  truckId   String   @unique
+  driver    String
+  latitude  Float?
+  longitude Float?
+  speed     Float
+  route     String
+  capacity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Route {
+  id     String @id @default(cuid())
+  name   String
+  eta    String
+  status String
+}
+
+model Alert {
+  id      String @id @default(cuid())
+  type    String
+  message String
 }
