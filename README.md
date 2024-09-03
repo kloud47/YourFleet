@@ -13,3 +13,7 @@
 <p>
   Dont push on main use Feature1 branch for now and don't forget to inform
 </p>
+
+<h3>Screenshots</h3>
+![Screenshot 2024-09-02 125553](https://github.com/user-attachments/assets/7570ae2f-78fa-42d2-9101-075e1f885e4b)
+![Screenshot 2024-09-02 162831](https://github.com/user-attachments/assets/95e8800e-8830-4587-ad81-92724b02b59b)
