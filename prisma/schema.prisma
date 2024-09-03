@@ -9,16 +9,50 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
+  provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
+enum Icon {
+  settings
+  chart
+  calendar
+  check
+  chip
+  compass
+  database
+  flag
+  home
+  info
+  link
+  lock
+  messages
+  notification
+  payment
+  power
+  receipt
+  shield
+  star
+  tune
+  videorecorder
+  wallet
+  warning
+  headphone
+  send
+  pipelines
+  person
+  category
+  contact
+  clipboardIcon
+}
+
 enum Role {
+  DEPARTMENT_HEAD
   AGENCY_OWNER
   AGENCY_ADMIN
-  SUBACCOUNT_USER
-  SUBACCOUNT_GUEST
+  DELIVERY_PARTNER
+  CUSTOMER
 }
 
 model User {
@@ -26,12 +60,12 @@ model User {
   name         String
   avatarUrl    String?        @db.Text
   email        String         @unique
-  password     String
+  password     String?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  role         Role           @default(SUBACCOUNT_USER)
+  role         Role           @default(CUSTOMER)
   agencyId     String?
-  Agency       Agency?        @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  AgencyHub    AgencyHub?     @relation(fields: [agencyId], references: [id], onDelete: Cascade)
   Permissions  Permissions[]
   Notification Notification[]
 
@@ -39,93 +73,83 @@ model User {
 }
 
 model Permissions {
-  id           String     @id @default(uuid())
-  email        String
-  User         User       @relation(fields: [email], references: [email], onDelete: Cascade)
-  subAccountId String
-  SubAccount   SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  access       Boolean
+  id        String  @id @default(uuid())
+  email     String
+  User      User    @relation(fields: [email], references: [email], onDelete: Cascade)
+  partnerId String
+  Partner   Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  access    Boolean
 
-  @@index([subAccountId])
+  @@index([partnerId])
   @@index([email])
 }
 
-model Agency {
-  id               String                @id @default(uuid())
-  connectAccountId String?               @default("")
-  // customerId       String                @default("")
-  name             String
-  agencyLogo       String                @db.Text
-  companyEmail     String                @db.Text
-  companyPhone     String
-  whiteLabel       Boolean               @default(true)
-  address          String
-  city             String
-  zipCode          String
-  state            String
-  country          String
-  goal             Int                   @default(5)
-  users            User[]
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt
-  SubAccount       SubAccount[]
-  SidebarOption    AgencySidebarOption[]
-  Invitation       Invitation[]
-  Notification     Notification[]
+model AgencyHub {
+  id            String                @id @default(uuid())
+  name          String
+  // agencyLogo    String?               @db.Text
+  companyEmail  String                @unique
+  companyPhone  String
+  address       String
+  city          String
+  pincode       String
+  state         String
+  country       String
+  users         User[]
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  Partner       Partner[]
+  SidebarOption AgencySidebarOption[]
+  Invitation    Invitation[]
+  Notification  Notification[]
   // AddOns           AddOns[]
   // Owner            Owner[]
 }
 
-model SubAccount {
-  id               String                    @id @default(uuid())
-  connectAccountId String?                   @default("")
-  name             String
-  subAccountLogo   String?                   @db.Text
-  createdAt        DateTime                  @default(now())
-  updatedAt        DateTime                  @updatedAt
-  companyEmail     String                    @db.Text
-  companyPhone     String
-  goal             Int                       @default(5)
-  address          String
-  city             String
-  zipCode          String
-  state            String
-  country          String
-  agencyId         String
-  truckId          String?
-  Agency           Agency                    @relation(fields: [agencyId], references: [id], onDelete: Cascade)
-  SidebarOption    SubAccountSidebarOption[]
-  Permissions      Permissions[]
+model Partner {
+  id            String                    @id @default(uuid())
+  name          String
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @updatedAt
+  OfficeEmail   String                    @db.Text
+  OfficePhone   String
+  address       String
+  pincode       String
+  agencyHubId   String
+  truckId       String?
+  AgencyHub     AgencyHub                 @relation(fields: [agencyHubId], references: [id], onDelete: Cascade)
+  SidebarOption SubAccountSidebarOption[]
+  Permissions   Permissions[]
   // Funnels          Funnel[]
   // Media            Media[]
   // Contact          Contact[]
   // Trigger          Trigger[]
   // Tags             Tag[]
-  Notification     Notification[]
+  Notification  Notification[]
 
-  @@index([agencyId])
+  @@index([agencyHubId])
 }
 
 model AgencySidebarOption {
-  id        String   @id @default(uuid())
-  name      String   @default("Menu")
-  link      String   @default("#")
-  // icon      Icon     @default(info)
+  id        String     @id @default(uuid())
+  name      String     @default("Menu")
+  link      String     @default("#")
+  icon      Icon       @default(info)
   agencyId  String
-  Agency    Agency?  @relation(fields: [agencyId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  AgencyHub AgencyHub? @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@index([agencyId])
 }
 
 model SubAccountSidebarOption {
-  id           String      @id @default(uuid())
-  name         String      @default("Menu")
-  link         String      @default("#")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  SubAccount   SubAccount? @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  id           String   @id @default(uuid())
+  name         String   @default("Menu")
+  link         String   @default("#")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Partner      Partner? @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
   subAccountId String?
 
   @@index([subAccountId])
@@ -135,9 +159,9 @@ model Invitation {
   id       String           @id @default(uuid())
   email    String           @unique
   agencyId String
-  Agency   Agency           @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  Agency   AgencyHub        @relation(fields: [agencyId], references: [id], onDelete: Cascade)
   status   InvitationStatus @default(PENDING)
-  role     Role             @default(SUBACCOUNT_USER)
+  role     Role             @default(DELIVERY_PARTNER)
 
   @@index([agencyId])
 }
@@ -155,9 +179,9 @@ model Notification {
   subAccountId String?
   userId       String
 
-  User       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Agency     Agency      @relation(fields: [agencyId], references: [id], onDelete: Cascade)
-  SubAccount SubAccount? @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  User       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Agency     AgencyHub @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  SubAccount Partner?  @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -30,7 +30,7 @@ const FormSchema = z.object({
     country: z.string().min(1),
 })
 
-const AgencyDetails = ({ data }: Props) => {
+const PartnerDetails = ({ data }: Props) => {
     const { toast } = useToast();
     const router = useRouter();
     const [deletingAgency, setDeletingAgency] = useState(false);
@@ -118,9 +118,9 @@ const AgencyDetails = ({ data }: Props) => {
             <Card className="w-[80%] mt-[64px]">
                 <CardHeader className="flex flex-row bg-muted">
                     <div>
-                    <CardTitle className="text-4xl mb-2 font-bold text-foreground tracking-wide">Agency Hub Information</CardTitle>
+                    <CardTitle className="text-4xl mb-2 font-bold text-foreground tracking-wide">Your Information</CardTitle>
                     <CardDescription>
-                        Lets create an agency to help your operations. You can edit agency settings later from the agency settiings tab.
+                        Lets create a reliable and responsive place for your operations, and help you provide better services.
                     </CardDescription>
                     </div>
                     {/* <Image src={'/DOP-post.png'} alt="DOP Logo" height={200} width={300} className="h-[200px]" /> */}
@@ -137,7 +137,7 @@ const AgencyDetails = ({ data }: Props) => {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Agency Name</FormLabel>
+                                    <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input
                                         placeholder="Your agency name"
@@ -153,7 +153,7 @@ const AgencyDetails = ({ data }: Props) => {
                                 name="companyEmail"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Agency Email</FormLabel>
+                                    <FormLabel>Work Email</FormLabel>
                                     <FormControl>
                                         <Input
                                         className="placeholder:text-muted"
@@ -174,7 +174,43 @@ const AgencyDetails = ({ data }: Props) => {
                                 name="companyPhone"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Agency Phone Number</FormLabel>
+                                    <FormLabel>Work Phone Number</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                        placeholder="Phone"
+                                        {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
+                            </div>
+                            <div className="flex md:flex-row gap-4">
+                                <FormField
+                                disabled={isLoading}
+                                control={form.control}
+                                name="companyPhone"
+                                render={({ field }) => (
+                                    <FormItem className="flex-1">
+                                    <FormLabel>Experience</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                        placeholder="Phone"
+                                        {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
+                                <FormField
+                                disabled={isLoading}
+                                control={form.control}
+                                name="companyPhone"
+                                render={({ field }) => (
+                                    <FormItem className="flex-1">
+                                    <FormLabel>DOB</FormLabel>
                                     <FormControl>
                                         <Input
                                         placeholder="Phone"
@@ -308,4 +344,4 @@ const AgencyDetails = ({ data }: Props) => {
     )
 }  
 
-export default AgencyDetails;
+export default PartnerDetails;

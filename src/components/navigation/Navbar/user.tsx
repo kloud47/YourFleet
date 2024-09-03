@@ -13,8 +13,8 @@ const UserProfile = (props: Props) => {
     const username = session.data?.user?.name
     return (
         <Popover>
-            <PopoverTrigger className='font-medium flex items-center gap-2 bg-muted px-2 rounded-full shadow-lg'>
-                <div className="bg-primary flex items-center justify-center text-lg p-1 h-full w-full border-2 text-[#fff] border-[#000] rounded-full">{username?.substring(0, 2)}</div>
+            <PopoverTrigger className='font-medium flex items-center gap-2 bg-muted px-2 rounded-full shadow-lg py-1'>
+                <div className="bg-primary flex items-center justify-center text-lg p-1 h-10 w-10 text-foreground rounded-full">{username?.substring(0, 2)}</div>
                 <div>{username}</div>
             </PopoverTrigger>
             <PopoverContent>
