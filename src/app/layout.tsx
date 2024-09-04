@@ -26,6 +26,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <div id="portal"></div>
             {children}
           </ThemeProvider>
         </Providers>

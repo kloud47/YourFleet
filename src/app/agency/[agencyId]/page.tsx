@@ -1,9 +1,13 @@
+import Dashboard from '@/components/dashboard/dashboard';
 import React from 'react'
 
 type Props = {}
 
-const page = (props: Props) => {
+const Page = (props: Props) => {
   return (
-    <div>page</div>
+    <div className='w-screen lg:pl-[300px]'>
+      <Dashboard />
+    </div>
   )
 }
+export default Page;
