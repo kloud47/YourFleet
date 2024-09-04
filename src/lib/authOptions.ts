@@ -3,8 +3,6 @@ import { db } from "@/lib/db";
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-
-
 export const authOptions = {
     providers: [
         CredentialsProvider({
@@ -51,11 +49,7 @@ export const authOptions = {
                   },
                 });
       
-                return {
-                  id: user.id.toString(),
-                  name: user.name,
-                  email: user.email,
-                };
+                return user;
               } catch (e) {
                 console.error(e);
               }
@@ -70,66 +64,58 @@ export const authOptions = {
     ],
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
-      // async jwt(token, user) {
-      //   if (user) {
-      //     token.role = user.role || "CUSTOMER"
-      //     token.name = user.name
-      //     token.email = user.email
-      //     token.sub = user.id
-      //   }
-      //   return token;
-      // },
       async session({ token, session }: any) {
-        session.user.id = token.sub;
-        session.user.email = token.email
-        session.user.name = token.name
-        session.user.role = token.role
-  
+        if(token){
+          session.user.id = token.id;
+          session.user.role = token.role;
+          session.user.email = token.email;
+          session.user.name = token.name;
+
+        }
+        console.log(session)
         return session;
       },
-    //   async signIn({ account, profile }: { account: any, profile: any }) {
-    //     if (!profile?.email) {
-    //         throw new Error("no Profile")
-    //     }
-        
-    //     await db.user.upsert({
-    //         where: { email: profile.email },
-    //         create: {
-    //             email: profile.email,
-    //             name: profile.name,
-    //             avatarUrl: profile.avatarUrl,
-    //         },
-    //         update: {
-    //             name: profile.name
-    //         }
-    //     })
-
-    //     return true;
-    // },
+      async jwt({token,user} : any ) {
+        if(user){
+          token.id = user.id?.toString();
+          token.name = user?.name;
+          token.role = user?.role;
+          token.email = user?.email
+        }
+        console.log(token)
+        return token
+      }
     },
     pages:{
         signIn :"/sign-in",
-    }
-    // callbacks: {
-        // async signIn({ account, profile }: { account: any, profile: any }) {
-        //     if (!profile?.email) {
-        //         throw new Error("no Profile")
-        //     }
-            
-        //     // await db.user.upsert({
-        //     //     where: { email: profile.email },
-        //     //     create: {
-        //     //         email: profile.email,
-        //     //         name: profile.name,
-        //     //         avatarUrl: profile.avatarUrl,
-        //     //     },
-        //     //     update: {
-        //     //         name: profile.name
-        //     //     }
-        //     // })
+    },
+    session: {
+        strategy: 'jwt'
+    },
+    // pages: {
+    //     signIn: "/sign-in"
+    // },
 
-        //     return redirect('/site')
-        // },
+    // callbacks: {
+    //     async signIn({ account, profile }: { account: any, profile: any }) {
+    //         if (!profile?.email) {
+    //             throw new Error("no Profile")
+    //         }
+            
+    //         // await db.user.upsert({
+    //         //     where: { email: profile.email },
+    //         //     create: {
+    //         //         email: profile.email,
+    //         //         name: profile.name,
+    //         //         avatarUrl: profile.avatarUrl,
+    //         //     },
+    //         //     update: {
+    //         //         name: profile.name
+    //         //     }
+    //         // })
+
+    //         return redirect('/site')
+    //     },
     //     // async redirect({ url, baseUrl }) {
     //     //     if (url.startsWith("/")) return `${baseUrl}${url}`
     //     //    // Allows callback URLs on the same origin
