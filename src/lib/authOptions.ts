@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+
+
 export const authOptions = {
     providers: [
         CredentialsProvider({
@@ -68,44 +70,66 @@ export const authOptions = {
     ],
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
+      // async jwt(token, user) {
+      //   if (user) {
+      //     token.role = user.role || "CUSTOMER"
+      //     token.name = user.name
+      //     token.email = user.email
+      //     token.sub = user.id
+      //   }
+      //   return token;
+      // },
       async session({ token, session }: any) {
         session.user.id = token.sub;
         session.user.email = token.email
         session.user.name = token.name
+        session.user.role = token.role
   
         return session;
       },
+    //   async signIn({ account, profile }: { account: any, profile: any }) {
+    //     if (!profile?.email) {
+    //         throw new Error("no Profile")
+    //     }
+        
+    //     await db.user.upsert({
+    //         where: { email: profile.email },
+    //         create: {
+    //             email: profile.email,
+    //             name: profile.name,
+    //             avatarUrl: profile.avatarUrl,
+    //         },
+    //         update: {
+    //             name: profile.name
+    //         }
+    //     })
+
+    //     return true;
+    // },
     },
     pages:{
         signIn :"/sign-in",
     }
-    // secret: process.env.JWT_SECRET || "",
-    // session: {
-    //     strategy: 'jwt'
-    // },
-    // pages: {
-    //     signIn: "/sign-in"
-    // },
     // callbacks: {
-    //     async signIn({ account, profile }: { account: any, profile: any }) {
-    //         if (!profile?.email) {
-    //             throw new Error("no Profile")
-    //         }
+        // async signIn({ account, profile }: { account: any, profile: any }) {
+        //     if (!profile?.email) {
+        //         throw new Error("no Profile")
+        //     }
             
-    //         // await db.user.upsert({
-    //         //     where: { email: profile.email },
-    //         //     create: {
-    //         //         email: profile.email,
-    //         //         name: profile.name,
-    //         //         avatarUrl: profile.avatarUrl,
-    //         //     },
-    //         //     update: {
-    //         //         name: profile.name
-    //         //     }
-    //         // })
+        //     // await db.user.upsert({
+        //     //     where: { email: profile.email },
+        //     //     create: {
+        //     //         email: profile.email,
+        //     //         name: profile.name,
+        //     //         avatarUrl: profile.avatarUrl,
+        //     //     },
+        //     //     update: {
+        //     //         name: profile.name
+        //     //     }
+        //     // })
 
-    //         return redirect('/site')
-    //     },
+        //     return redirect('/site')
+        // },
     //     // async redirect({ url, baseUrl }) {
     //     //     if (url.startsWith("/")) return `${baseUrl}${url}`
     //     //    // Allows callback URLs on the same origin

@@ -47,6 +47,11 @@ export const upsertAgency = async (agencyHub: AgencyHub) => {
                         link: `/agency/${agencyHub.id}`,
                     },
                     {
+                        name: 'Partners',
+                        icon: 'person',
+                        link: `/agency/${agencyHub.id}/partners`,
+                    },
+                    {
                         name: 'Manage',
                         icon: 'clipboardIcon',
                         link: `/agency/${agencyHub.id}/manage`,
@@ -79,5 +84,32 @@ export const upsertAgency = async (agencyHub: AgencyHub) => {
     } catch (error) {
     console.log(error)
     }
+}
+
+export const getAuthUserDetails = async () => {
+    const session = await getServerSession(authOptions);
+    const user = session.user;
+    if (!user) return
+
+    const userData = await db.user.findUnique({
+        where: {
+            email: user.email
+        },
+        include: {
+            AgencyHub: {
+                include: {
+                    SidebarOption: true,
+                    Partner: {
+                        include: {
+                            SidebarOption: true,
+                        }
+                    }
+                }
+            },
+            Permissions: true
+        }
+    })
+
+    return userData;
 }
 

@@ -49,7 +49,7 @@ interface User {
   role: string;
 }
 
-export default function Component() {
+export default function Dashboard() {
   const [trucks, setTrucks] = useState<Truck[]>([]);
   const [routes, setRoutes] = useState<Route[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -92,9 +92,9 @@ export default function Component() {
   }, []);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-background">
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md">
+      {/* <div className="w-64 bg-white shadow-md">
         <div className="p-4">
           <h2 className="text-2xl font-bold mb-4">Fleet Dashboard</h2>
           <nav>
@@ -116,12 +116,12 @@ export default function Component() {
             </Button>
           </nav>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">Fleet Overview</h1>
+          {/* <h1 className="text-3xl font-bold mb-4">Fleet Overview</h1> */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

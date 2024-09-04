@@ -48,6 +48,12 @@
     --ring: 161 100% 31%;
     --radius: 0.3rem;
   }
+  html {
+    /* overflow-x: hidden; */
+    scrollbar-width: thin;
+    scrollbar-color: #02be82 #fff;
+  }
+
 }
 
 @layer utilities {

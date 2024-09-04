@@ -1,6 +1,6 @@
 "use client"
 import { useToast } from "../ui/use-toast";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertDialog } from "@radix-ui/react-alert-dialog";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import { v4 } from "uuid";
 import Loading from "../global/Loading";
 import { AgencyHub } from "@prisma/client";
+import { signIn, useSession } from "next-auth/react";
 
 type Props = {
     data: Partial<AgencyHub>
@@ -31,6 +32,7 @@ const FormSchema = z.object({
 })
 
 const AgencyDetails = ({ data }: Props) => {
+    const session = useSession();
     const { toast } = useToast();
     const router = useRouter();
     const [deletingAgency, setDeletingAgency] = useState(false);
@@ -77,7 +79,9 @@ const AgencyDetails = ({ data }: Props) => {
                 toast({
                     title: `Created Hub, ${values.name}`,
                 })
-            // if (data?.id) return router.(`/${response?.id}`)
+                // console.log(session.data?.user.role);
+                await signIn('credentials', { redirect: false });
+                return redirect(`/agency/${response?.id}`);
                 // if (response) {
                 //     return router.refresh()
                 // }
