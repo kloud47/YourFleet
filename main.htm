@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  width: 300px;
+  height: 200px;
+  border: 1px solid black;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px;
+  background-color: white; 
+  margin: 50px auto; 
+  position: relative; 
+}
+
+.cross-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 1%; 
+  transform: translateY(50%);
+  right: 300px; 
+  cursor: pointer;
+  font-size: 24px;
+  color: black;
+}
+
+.cross {
+  font-size: 24px;
+  color: black;
+}
+
+.button {
+  background-color: #4CAF50; 
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; 
+}
+
+.button:hover {
+  background-color: #3e8e41; 
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.popup-content {
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<h2>box</h2>
+<div class="container">
+  <button class="button" onclick="openPopup('hub')">Hub</button>
+  <button class="button" onclick="openPopup('postOffice')">Post Office</button>
+  <button class="button" onclick="openPopup('deliveryPartner')">Delivery Partner</button>
+  <button class="button" onclick="openPopup('customer')">Customer</button>
+</div>
+<div class="cross-container">
+  <div class="cross">&times;</div> 
+</div>
+<div id="popup" class="popup">
+  <span class="close" onclick="closePopup()">&times;</span>
+  <h2 id="popupTitle"></h2>
+  <div class="popup-content">
+    <p id="popupContent"></p>
+  </div>
+</div>
+<script>
+function openPopup(id) {
+  document.getElementById("popup").style.display = "block";
+  document.getElementById("popupTitle").innerHTML = id.toUpperCase();
+  document.getElementById("popupContent").innerHTML = "This is the content for " + id + ".";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+</script>
+</body>
+</html>
