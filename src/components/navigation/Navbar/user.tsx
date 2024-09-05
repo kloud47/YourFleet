@@ -2,9 +2,10 @@
 import React from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover"
 import { Command, CommandInput, CommandGroup, CommandItem, CommandList, CommandSeparator } from "../../ui/command"
-import { Settings, User } from "lucide-react"
+import { MailOpen, Settings, User } from "lucide-react"
 import { signOut, useSession } from "next-auth/react"
 import { Button } from '@/components/ui/button'
+import Invitation from '@/components/global/Invitation'
 
 type Props = {}
 
@@ -22,10 +23,16 @@ const UserProfile = (props: Props) => {
                     <CommandInput placeholder="Search.." />
                     <CommandList>
                         <CommandGroup heading="Profile">
-                            <CommandItem><User size={16} />manage</CommandItem>
-                            <CommandItem><Settings size={16} />Settings</CommandItem>
+                            <CommandItem className='gap-x-2'><User size={16} />manage</CommandItem>
+                            <CommandItem className='gap-x-2'><Settings size={16} />Settings</CommandItem>
                         </CommandGroup>
                         <CommandSeparator />
+                        <CommandGroup>
+                            <CommandItem className='gap-x-2'>
+                                <MailOpen size={16} />
+                                <Invitation />
+                            </CommandItem>
+                        </CommandGroup>
                         <CommandGroup>
                             <Button 
                                 variant={'outline'}

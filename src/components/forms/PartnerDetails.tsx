@@ -140,7 +140,7 @@ const PartnerDetails = ({ data }: Props) => {
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                        placeholder="Your agency name"
+                                        placeholder="Your name"
                                         {...field}
                                         />
                                     </FormControl>
@@ -213,7 +213,7 @@ const PartnerDetails = ({ data }: Props) => {
                                     <FormLabel>DOB</FormLabel>
                                     <FormControl>
                                         <Input
-                                        placeholder="Phone"
+                                        placeholder="Date of birth"
                                         {...field}
                                         />
                                     </FormControl>
@@ -243,44 +243,10 @@ const PartnerDetails = ({ data }: Props) => {
                                 <FormField
                                 disabled={isLoading}
                                 control={form.control}
-                                name="city"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                    <FormLabel>City</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                        placeholder="City"
-                                        {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
-                                <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="state"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                    <FormLabel>State</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                        placeholder="State"
-                                        {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
-                                <FormField
-                                disabled={isLoading}
-                                control={form.control}
                                 name="pincode"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Zipcpde</FormLabel>
+                                    <FormLabel>Pincode</FormLabel>
                                     <FormControl>
                                         <Input
                                         placeholder="pincode"

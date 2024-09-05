@@ -248,7 +248,7 @@ const AgencyDetails = ({ data }: Props) => {
                                 name="pincode"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Zipcpde</FormLabel>
+                                    <FormLabel>pincode</FormLabel>
                                     <FormControl>
                                         <Input
                                         placeholder="pincode"

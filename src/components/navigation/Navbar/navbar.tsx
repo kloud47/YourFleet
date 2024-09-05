@@ -16,7 +16,7 @@ type Props = {
 export const Navbar = async ({ users }: Props) => {
     const session = await getServerSession(authOptions)
     return (
-            <div className="p-4 flex items-center justify-between relative z-40">
+            <div className="p-4 flex items-center justify-between relative z-30">
                 <aside className="flex items-center">
                     <Image src={"/logo.png"} width={40} height={40} alt="logo" />
                     <span className="text-2xl font-extrabold italic">eet</span>

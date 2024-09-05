@@ -9,20 +9,20 @@ import { useForm } from "react-hook-form";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../ui/input";
-import { initUser, upsertAgency } from "@/lib/queries";
+import { initUser, upsertAgency, upsertOffice } from "@/lib/queries";
 import { Button } from "../ui/button";
 import { v4 } from "uuid";
 import Loading from "../global/Loading";
-import { AgencyHub } from "@prisma/client";
+import { AgencyHub, Postoffice } from "@prisma/client";
 
 type Props = {
-    data: Partial<AgencyHub>
+    data: Partial<Postoffice>
 }
 
-const FormSchema = z.object({
+const OfficeFormSchema = z.object({
     name: z.string().min(2, {message: 'Agency name must be atleast 2 chars.'}),
-    companyEmail: z.string().min(1),
-    companyPhone: z.string().min(1),
+    officeEmail: z.string().min(1),
+    officePhone: z.string().min(1),
     address: z.string().min(1),
     city: z.string().min(1),
     pincode: z.string().min(1),
@@ -34,18 +34,18 @@ const OfficeDetails = ({ data }: Props) => {
     const { toast } = useToast();
     const router = useRouter();
     const [deletingAgency, setDeletingAgency] = useState(false);
-    const form = useForm<z.infer<typeof FormSchema>>({
+    const form = useForm<z.infer<typeof OfficeFormSchema>>({
         mode: 'onChange',
-        resolver: zodResolver(FormSchema),
+        resolver: zodResolver(OfficeFormSchema),
         defaultValues: {
             name: data?.name,
-            companyEmail: data?.companyEmail,
-            companyPhone: data?.companyPhone,
+            officeEmail: data?.postofficeEmail,
+            officePhone: data?.postofficePhone,
             address: data?.address,
             city: data?.city,
             pincode: data?.pincode,
             state: data?.state,
-            country: data?.country,
+            // country: data?.,
         },
     })
     const isLoading = form.formState.isSubmitting;
@@ -56,23 +56,23 @@ const OfficeDetails = ({ data }: Props) => {
         }
     }, [data])
 
-    const handleSubmit = async (values: z.infer<typeof FormSchema>) => {
+    const handleSubmit = async (values: z.infer<typeof OfficeFormSchema>) => {
         try {
             let newUser;
-            newUser = await initUser({ role: "AGENCY_OWNER" })
+            newUser = await initUser({ role: "OFFICE_ADMIN" })
             if (!data?.id) {
-                const response = await upsertAgency({
+                const response = await upsertOffice({
                     id: data?.id ? data.id : v4(),
                     address: values.address,
                     city: values.city,
-                    companyPhone: values.companyPhone,
+                    state: values.state || "ASSAM",
+                    officePhone: values.officePhone,
                     country: values.country,
                     name: values.name,
-                    state: values.state,
                     pincode: values.pincode,
                     createdAt: new Date(),
                     updatedAt: new Date(),
-                    companyEmail: values.companyEmail,
+                    officeEmail: values.officeEmail,
                 })
                 toast({
                     title: `Created Hub, ${values.name}`,
@@ -140,7 +140,7 @@ const OfficeDetails = ({ data }: Props) => {
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
                                         <Input
-                                        placeholder="Your agency name"
+                                        placeholder="Your office name"
                                         {...field}
                                         />
                                     </FormControl>
@@ -150,10 +150,10 @@ const OfficeDetails = ({ data }: Props) => {
                                 />
                                 <FormField
                                 control={form.control}
-                                name="companyEmail"
+                                name="officeEmail"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Work Email</FormLabel>
+                                    <FormLabel>Office Email</FormLabel>
                                     <FormControl>
                                         <Input
                                         className="placeholder:text-muted"
@@ -171,10 +171,10 @@ const OfficeDetails = ({ data }: Props) => {
                                 <FormField
                                 disabled={isLoading}
                                 control={form.control}
-                                name="companyPhone"
+                                name="officePhone"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Work Phone Number</FormLabel>
+                                    <FormLabel>Office Phone Number</FormLabel>
                                     <FormControl>
                                         <Input
                                         placeholder="Phone"
@@ -192,7 +192,7 @@ const OfficeDetails = ({ data }: Props) => {
                                 name="address"
                                 render={({ field }) => (
                                 <FormItem className="flex-1">
-                                    <FormLabel>Address</FormLabel>
+                                    <FormLabel>Address/residence</FormLabel>
                                     <FormControl>
                                     <Input
                                         placeholder="123 near.."
@@ -204,23 +204,6 @@ const OfficeDetails = ({ data }: Props) => {
                                 )}
                             />
                             <div className="flex md:flex-row gap-4">
-                                <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="city"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                    <FormLabel>City</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                        placeholder="City"
-                                        {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
                                 <FormField
                                 disabled={isLoading}
                                 control={form.control}
@@ -241,10 +224,27 @@ const OfficeDetails = ({ data }: Props) => {
                                 <FormField
                                 disabled={isLoading}
                                 control={form.control}
+                                name="city"
+                                render={({ field }) => (
+                                    <FormItem className="flex-1">
+                                    <FormLabel>city</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                        placeholder="City"
+                                        {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                                />
+                                <FormField
+                                disabled={isLoading}
+                                control={form.control}
                                 name="pincode"
                                 render={({ field }) => (
                                     <FormItem className="flex-1">
-                                    <FormLabel>Zipcpde</FormLabel>
+                                    <FormLabel>pincode</FormLabel>
                                     <FormControl>
                                         <Input
                                         placeholder="pincode"
@@ -265,8 +265,9 @@ const OfficeDetails = ({ data }: Props) => {
                                     <FormLabel>Country</FormLabel>
                                     <FormControl>
                                     <Input
-                                        placeholder="Country"
-                                        {...field}
+                                        value={'India'}
+                                        // placeholder="Country"
+                                        // {...field}
                                     />
                                     </FormControl>
                                     <FormMessage />
