@@ -3,7 +3,8 @@ import { db } from "@/lib/db";
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-export const authOptions = {
+import { AuthOptions } from "next-auth";
+export const authOptions : AuthOptions= {
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -30,11 +31,7 @@ export const authOptions = {
                   existingUser.password
                 );
                 if (passwordValidation) {
-                  return {
-                    id: existingUser.id.toString(),
-                    name: existingUser.name,
-                    email: existingUser.email,
-                  };
+                  return existingUser;
                 }
                 return null;
               }
@@ -72,7 +69,7 @@ export const authOptions = {
           session.user.name = token.name;
 
         }
-        console.log(session)
+        // console.log(session)
         return session;
       },
       async jwt({token,user} : any ) {
@@ -82,7 +79,7 @@ export const authOptions = {
           token.role = user?.role;
           token.email = user?.email
         }
-        console.log(token)
+        // console.log(token)
         return token
       }
     },

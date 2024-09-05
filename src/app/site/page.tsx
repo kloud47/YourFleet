@@ -19,6 +19,7 @@ import AuthOptions from "@/components/global/AuthOptions";
 
 export default function Home() {
   const session = useSession();
+  console.log(session.data)
   const [open, setOpen] = useState(false)
 
 

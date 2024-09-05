@@ -10,7 +10,7 @@ const AgencyPage = async () => {
     return (
         <div className="flex justify-center items-center w-full">
             <Back />
-            <PartnerDetails data={{ companyEmail: session.user.email }} />
+            <PartnerDetails data={{ OfficeEmail: String(session?.user?.email) }} />
             <Toaster />
         </div>
     )

@@ -51,8 +51,39 @@ enum Role {
   DEPARTMENT_HEAD
   AGENCY_OWNER
   AGENCY_ADMIN
+  OFFICE_ADMIN
   DELIVERY_PARTNER
   CUSTOMER
+}
+
+// schema.prisma
+enum State {
+  ANDHRA_PRADESH
+  ARUNACHAL_PRADESH
+  ASSAM
+  BIHAR
+  CHHATTISGARH
+  GOA
+  GUJARAT
+  HARYANA
+  HIMACHAL_PRADESH
+  JHARKHAND
+  KARNATAKA
+  KERALA
+  MADHYA_PRADESH
+  MAHARASHTRA
+  MANIPUR
+  MEGHALAYA
+  MIZORAM
+  NAGALAND
+  ODISHA
+  PUNJAB
+  RAJASTHAN
+  SIKKIM
+  TAMIL_NADU
+  TELANGANA
+  TRIPURA
+  UTTAR_PRADESH
 }
 
 model User {
@@ -66,21 +97,27 @@ model User {
   role         Role           @default(CUSTOMER)
   agencyId     String?
   AgencyHub    AgencyHub?     @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  PartnerId    String?
+  Partner      Partner?       @relation(fields: [PartnerId], references: [id], onDelete: Cascade)
   Permissions  Permissions[]
   Notification Notification[]
 
+  @@index([PartnerId])
   @@index([agencyId])
 }
 
 model Permissions {
-  id        String  @id @default(uuid())
-  email     String
-  User      User    @relation(fields: [email], references: [email], onDelete: Cascade)
-  partnerId String
-  Partner   Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
-  access    Boolean
+  id           String      @id @default(uuid())
+  email        String
+  User         User        @relation(fields: [email], references: [email], onDelete: Cascade)
+  partnerId    String
+  Partner      Partner     @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  access       Boolean
+  Postoffice   Postoffice? @relation(fields: [postofficeId], references: [id])
+  postofficeId String?
 
   @@index([partnerId])
+  @@index([postofficeId])
   @@index([email])
 }
 
@@ -104,6 +141,7 @@ model AgencyHub {
   Notification  Notification[]
   // AddOns           AddOns[]
   // Owner            Owner[]
+  Postoffice    Postoffice[]
 }
 
 model Partner {
@@ -111,12 +149,13 @@ model Partner {
   name          String
   createdAt     DateTime                  @default(now())
   updatedAt     DateTime                  @updatedAt
-  OfficeEmail   String                    @db.Text
+  OfficeEmail   String                    @unique
   OfficePhone   String
   address       String
   pincode       String
   agencyHubId   String
   truckId       String?
+  users         User[]
   AgencyHub     AgencyHub                 @relation(fields: [agencyHubId], references: [id], onDelete: Cascade)
   SidebarOption SubAccountSidebarOption[]
   Permissions   Permissions[]
@@ -126,6 +165,34 @@ model Partner {
   // Trigger          Trigger[]
   // Tags             Tag[]
   Notification  Notification[]
+
+  @@index([agencyHubId])
+}
+
+model Postoffice {
+  id              String                    @id @default(uuid())
+  name            String
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+  postofficeEmail String                    @db.Text
+  postofficePhone String
+  city            String
+  state           State
+  District        String?
+  address         String
+  pincode         String
+  agencyHubId     String
+  truckId         String?
+  AgencyHub       AgencyHub                 @relation(fields: [agencyHubId], references: [id], onDelete: Cascade)
+  SidebarOption   SubAccountSidebarOption[]
+  Permissions     Permissions[]
+  // Funnels          Funnel[]
+  // Media            Media[]
+  // Contact          Contact[]
+  // Trigger          Trigger[]
+  // Tags             Tag[]
+  Notification    Notification[]
+  Invitation      Invitation[]
 
   @@index([agencyHubId])
 }
@@ -144,27 +211,36 @@ model AgencySidebarOption {
 }
 
 model SubAccountSidebarOption {
-  id           String   @id @default(uuid())
-  name         String   @default("Menu")
-  link         String   @default("#")
-  icon         Icon     @default(info)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  Partner      Partner? @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
+  id           String      @id @default(uuid())
+  name         String      @default("Menu")
+  link         String      @default("#")
+  icon         Icon        @default(info)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Partner      Partner?    @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
   subAccountId String?
+  Postoffice   Postoffice? @relation(fields: [postofficeId], references: [id])
+  postofficeId String?
 
   @@index([subAccountId])
+  @@index([postofficeId])
 }
 
 model Invitation {
-  id       String           @id @default(uuid())
-  email    String           @unique
-  agencyId String
-  Agency   AgencyHub        @relation(fields: [agencyId], references: [id], onDelete: Cascade)
-  status   InvitationStatus @default(PENDING)
-  role     Role             @default(DELIVERY_PARTNER)
+  id           String           @id @default(uuid())
+  email        String           @unique
+  agencyId     String
+  message      String?
+  Agency       AgencyHub        @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  // Postoffice   Postoffice?      @relation(fields: [postofficeId], references: [id])
+  status       InvitationStatus @default(PENDING)
+  role         Role             @default(DELIVERY_PARTNER)
+  postofficeId String?
+  // Postoffice   Postoffice?      @relation(fields: [postofficeId], references: [id])
+  Postoffice   Postoffice?      @relation(fields: [postofficeId], references: [id])
 
   @@index([agencyId])
+  @@index([postofficeId])
 }
 
 enum InvitationStatus {
@@ -184,11 +260,14 @@ model Notification {
   Agency     AgencyHub @relation(fields: [agencyId], references: [id], onDelete: Cascade)
   SubAccount Partner?  @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  Postoffice   Postoffice? @relation(fields: [postofficeId], references: [id])
+  postofficeId String?
 
   @@index([agencyId])
   @@index([subAccountId])
+  @@index([postofficeId])
   @@index([userId])
 }
 

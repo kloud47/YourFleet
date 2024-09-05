@@ -1,4 +1,3 @@
-import AgencyDetails from "@/components/forms/AgencyDetails";
 import OfficeDetails from "@/components/forms/OfficeDetails";
 import PartnerDetails from "@/components/forms/PartnerDetails";
 import Back from "@/components/navigation/backButton";
@@ -11,7 +10,7 @@ const AgencyPage = async () => {
     return (
         <div className="flex justify-center items-center w-full">
             <Back />
-            <OfficeDetails data={{ companyEmail: session.user.email }} />
+            <OfficeDetails data={{ postofficeEmail: String(session?.user?.email) }} />
             <Toaster />
         </div>
     )
