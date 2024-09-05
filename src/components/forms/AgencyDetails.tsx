@@ -80,8 +80,7 @@ const AgencyDetails = ({ data }: Props) => {
                     title: `Created Hub, ${values.name}`,
                 })
                 // console.log(session.data?.user.role);
-                await signIn('credentials', { redirect: false });
-                return redirect(`/agency/${response?.id}`);
+                return redirect(`/sign-in`);
                 // if (response) {
                 //     return router.refresh()
                 // }

@@ -7,6 +7,7 @@ import { Button } from "../../ui/button"
 import { getServerSession } from "next-auth"
 import authOptions from "@/lib/authOptions"
 import UserProfile from "./user"
+import { getInvite } from "@/lib/queries"
 
 type Props = {
     users?: null 
@@ -15,6 +16,10 @@ type Props = {
 
 export const Navbar = async ({ users }: Props) => {
     const session = await getServerSession(authOptions)
+
+    const InviteData = await getInvite();
+    // console.log(InviteData);
+
     return (
             <div className="p-4 flex items-center justify-between relative z-30">
                 <aside className="flex items-center">
@@ -42,7 +47,7 @@ export const Navbar = async ({ users }: Props) => {
                     {/* <div>
                         <div>{session.user.name}</div>
                     </div> */}
-                    {session && <UserProfile />}
+                    {session && <UserProfile inviteData={InviteData} />}
                     <ModeToggle />
                 </aside>
             </div>

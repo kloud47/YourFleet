@@ -1,4 +1,3 @@
-import BlurPage from "@/components/global/blur-page"
 import Infobar from "@/components/navigation/Navbar/Infobar"
 import Sidebar from "@/components/navigation/Sidebar/sidebar"
 import { redirect } from "next/navigation"

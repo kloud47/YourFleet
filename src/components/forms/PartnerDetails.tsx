@@ -9,14 +9,14 @@ import { useForm } from "react-hook-form";
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "../ui/input";
-import { initUser, upsertAgency } from "@/lib/queries";
+import { getInviteId, initUser, upsertAgency, upsertPartner } from "@/lib/queries";
 import { Button } from "../ui/button";
 import { v4 } from "uuid";
 import Loading from "../global/Loading";
-import { AgencyHub } from "@prisma/client";
+import { Partner } from "@prisma/client";
 
 type Props = {
-    data: Partial<AgencyHub>
+    data: Partial<Partner>
 }
 
 const FormSchema = z.object({
@@ -39,14 +39,11 @@ const PartnerDetails = ({ data }: Props) => {
         resolver: zodResolver(FormSchema),
         defaultValues: {
             name: data?.name,
-            companyEmail: data?.companyEmail,
-            companyPhone: data?.companyPhone,
+            companyEmail: data?.OfficeEmail,
+            companyPhone: data?.OfficePhone,
             address: data?.address,
-            city: data?.city,
             pincode: data?.pincode,
-            state: data?.state,
-            country: data?.country,
-        },
+        }
     })
     const isLoading = form.formState.isSubmitting;
 
@@ -58,25 +55,26 @@ const PartnerDetails = ({ data }: Props) => {
 
     const handleSubmit = async (values: z.infer<typeof FormSchema>) => {
         try {
+            console.log("ok")
             let newUser;
-            newUser = await initUser({ role: "AGENCY_OWNER" })
+            newUser = await initUser({ role: "DELIVERY_PARTNER" })
+            const HubId = await getInviteId(values.companyEmail)
             if (!data?.id) {
-                const response = await upsertAgency({
+                const response = await upsertPartner({
                     id: data?.id ? data.id : v4(),
                     address: values.address,
-                    city: values.city,
-                    companyPhone: values.companyPhone,
-                    country: values.country,
+                    OfficePhone: values.companyPhone,
                     name: values.name,
-                    state: values.state,
                     pincode: values.pincode,
+                    agencyHubId: HubId,
                     createdAt: new Date(),
                     updatedAt: new Date(),
-                    companyEmail: values.companyEmail,
+                    OfficeEmail: values.companyEmail,
                 })
                 toast({
-                    title: `Created Hub, ${values.name}`,
+                    title: `Created Account`,
                 })
+                return router.push('/sign-in')
             // if (data?.id) return router.(`/${response?.id}`)
                 // if (response) {
                 //     return router.refresh()
@@ -186,24 +184,7 @@ const PartnerDetails = ({ data }: Props) => {
                                 )}
                                 />
                             </div>
-                            <div className="flex md:flex-row gap-4">
-                                <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="companyPhone"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                    <FormLabel>Experience</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                        placeholder="Phone"
-                                        {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
+                            {/* <div className="flex md:flex-row gap-4">
                                 <FormField
                                 disabled={isLoading}
                                 control={form.control}
@@ -221,7 +202,7 @@ const PartnerDetails = ({ data }: Props) => {
                                     </FormItem>
                                 )}
                                 />
-                            </div>
+                            </div> */}
                             <FormField
                                 disabled={isLoading}
                                 control={form.control}
@@ -239,26 +220,24 @@ const PartnerDetails = ({ data }: Props) => {
                                 </FormItem>
                                 )}
                             />
-                            <div className="flex md:flex-row gap-4">
-                                <FormField
-                                disabled={isLoading}
-                                control={form.control}
-                                name="pincode"
-                                render={({ field }) => (
-                                    <FormItem className="flex-1">
-                                    <FormLabel>Pincode</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                        placeholder="pincode"
-                                        {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                                />
-                            </div>
                             <FormField
+                            disabled={isLoading}
+                            control={form.control}
+                            name="pincode"
+                            render={({ field }) => (
+                                <FormItem className="flex-1">
+                                <FormLabel>Pincode</FormLabel>
+                                <FormControl>
+                                    <Input
+                                    placeholder="pincode"
+                                    {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            {/* <FormField
                                 disabled={isLoading}
                                 control={form.control}
                                 name="country"
@@ -274,7 +253,7 @@ const PartnerDetails = ({ data }: Props) => {
                                     <FormMessage />
                                 </FormItem>
                                 )}
-                            />
+                            /> */}
                             <Button
                                 type="submit"
                                 // disabled={isLoading}

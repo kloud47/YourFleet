@@ -30,6 +30,8 @@ import { Separator } from '../../ui/separator'
 // import { icons } from '../../lib/contants'
 import PartnerDetails from '@/components/forms/PartnerDetails'
 import { icons } from '@/lib/constants'
+import CustomModal from '@/components/global/custom-modal'
+import InviteModal from '@/components/forms/Invite'
 
 type Props = {
     defaultOpen?: boolean
@@ -233,26 +235,16 @@ const MenuOptions = ({
                     {/* {(user?.role === 'AGENCY_OWNER' ||
                     user?.role === 'AGENCY_ADMIN') && ( */}
                     <SheetClose>
-                        <Button
-                        className="w-full flex gap-2"
-                        // onClick={() => {
-                        //     setOpen(
-                        //     <CustomModal
-                        //         title="Create A Subaccount"
-                        //         subheading="You can switch between your agency account and the subaccount from the sidebar"
-                        //     >
-                        //         <SubAccountDetails
-                        //         agencyDetails={user?.Agency as Agency}
-                        //         userId={user?.id as string}
-                        //         userName={user?.name}
-                        //         />
-                        //     </CustomModal>
-                        //     )
-                        // }}
-                        >
-                        <PlusCircleIcon size={15} />
-                        Invite Delivery Partner
-                        </Button>
+                            <CustomModal
+                                title="Create Invite"
+                                subheading="Invite your delivery partner"
+                            >
+                                <InviteModal
+                                    agencyDetails={user?.AgencyHub as AgencyHub}
+                                    userId={user?.id as string}
+                                    // userName={user?.name}
+                                />
+                            </CustomModal>
                     </SheetClose>
                     {/* )} */}
                 </Command>

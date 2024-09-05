@@ -1,3 +1,4 @@
+"use client"
 import {
     Drawer,
     DrawerClose,
@@ -10,9 +11,22 @@ import {
 } from "@/components/ui/drawer"
 import { Button } from "../ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
+import Link from "next/link";
 
+type Props = {
+    inviteData?: {
+        id: string;
+        email: string;
+        agencyId: string;
+        message: string | null;
+        // status: $Enums.InvitationStatus;
+        // role: $Enums.Role;
+        postofficeId: string | null;
+    }[]
+}
 
-const Invitation = () => {
+const Invitation = ({ inviteData }: Props) => {
+    console.log("ok => i", inviteData)
     return (
         <Drawer>
             <DrawerTrigger>Invitation</DrawerTrigger>
@@ -25,13 +39,17 @@ const Invitation = () => {
                     <CommandList>
                         <CommandEmpty>No results found.</CommandEmpty>
                         <CommandGroup heading="Invite">
-                            <CommandItem className="flex p-2 justify-between mb-2">
-                                <div className="flex flex-col">
-                                    Type1 - Name1
-                                    <div className="text-sm text-[#8b8b8b]">2-12-24</div>
-                                </div>
-                                <Button variant={"default"}>Accept</Button>
-                            </CommandItem>
+                            {
+                                inviteData?.map((invite) => (
+                                    <CommandItem className="flex p-2 justify-between mb-2">
+                                        <div className="flex flex-col">
+                                            {invite.email}
+                                            <div className="text-sm text-[#8b8b8b]">2-12-24</div>
+                                        </div>
+                                        <Link href={"/delivery-partner"}><Button variant={"default"}>Accept</Button></Link>
+                                    </CommandItem>
+                                ))
+                            }
                         </CommandGroup>
                     </CommandList>
                     </Command>

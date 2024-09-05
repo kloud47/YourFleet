@@ -7,9 +7,19 @@ import { signOut, useSession } from "next-auth/react"
 import { Button } from '@/components/ui/button'
 import Invitation from '@/components/global/Invitation'
 
-type Props = {}
+type Props = {
+    inviteData?: {
+        id: string;
+        email: string;
+        agencyId: string;
+        message: string | null;
+        // status: $Enums.InvitationStatus;
+        // role: $Enums.Role;
+        postofficeId: string | null;
+    }[]
+}
 
-const UserProfile = (props: Props) => {
+const UserProfile = ({ inviteData }: Props) => {
     const session = useSession();
     const username = session.data?.user?.name
     return (
@@ -30,7 +40,7 @@ const UserProfile = (props: Props) => {
                         <CommandGroup>
                             <CommandItem className='gap-x-2'>
                                 <MailOpen size={16} />
-                                <Invitation />
+                                <Invitation inviteData={inviteData} />
                             </CommandItem>
                         </CommandGroup>
                         <CommandGroup>

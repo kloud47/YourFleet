@@ -97,9 +97,12 @@ model User {
   role         Role           @default(CUSTOMER)
   agencyId     String?
   AgencyHub    AgencyHub?     @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  PartnerId    String?
+  Partner      Partner?       @relation(fields: [PartnerId], references: [id], onDelete: Cascade)
   Permissions  Permissions[]
   Notification Notification[]
 
+  @@index([PartnerId])
   @@index([agencyId])
 }
 
@@ -146,12 +149,13 @@ model Partner {
   name          String
   createdAt     DateTime                  @default(now())
   updatedAt     DateTime                  @updatedAt
-  OfficeEmail   String                    @db.Text
+  OfficeEmail   String                    @unique
   OfficePhone   String
   address       String
   pincode       String
   agencyHubId   String
   truckId       String?
+  users         User[]
   AgencyHub     AgencyHub                 @relation(fields: [agencyHubId], references: [id], onDelete: Cascade)
   SidebarOption SubAccountSidebarOption[]
   Permissions   Permissions[]
@@ -228,10 +232,12 @@ model Invitation {
   agencyId     String
   message      String?
   Agency       AgencyHub        @relation(fields: [agencyId], references: [id], onDelete: Cascade)
-  Postoffice   Postoffice?      @relation(fields: [postofficeId], references: [id])
+  // Postoffice   Postoffice?      @relation(fields: [postofficeId], references: [id])
   status       InvitationStatus @default(PENDING)
   role         Role             @default(DELIVERY_PARTNER)
   postofficeId String?
+  // Postoffice   Postoffice?      @relation(fields: [postofficeId], references: [id])
+  Postoffice   Postoffice?      @relation(fields: [postofficeId], references: [id])
 
   @@index([agencyId])
   @@index([postofficeId])
