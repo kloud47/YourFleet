@@ -269,3 +269,20 @@ export const upsertPartner = async (partner: Partner) => {
     console.log(error)
     }
 }
+
+export const getAgency = async (userEmail : string) => {
+    try {
+        const agencyId = await db.user.findFirst({
+            where: {
+                email: userEmail
+            },
+            select: {
+                agencyId: true
+            }
+        })
+
+        return agencyId
+    } catch (error) {
+        console.log(error)
+    }
+}

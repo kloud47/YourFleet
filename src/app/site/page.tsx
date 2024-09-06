@@ -15,6 +15,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import AuthOptions from "@/components/global/AuthOptions";
+import GetStatrtedButton from "@/components/global/GetStartButton";
 
 
 export default function Home() {
@@ -52,11 +53,7 @@ export default function Home() {
               </button>
             </Link> 
             :
-            <Button 
-              onClick={() => setOpen(true) }
-              className="button animate-slidein opacity-0 [--slidein-delay:900ms]">
-                Get Started
-            </Button>
+            <GetStatrtedButton setOpen={() => setOpen(true)} />
             }
           {/* <div className="bottom-0 top-[50%] bg-gradient-to-t dark:from-background left-0 right-0 absolute z-10"></div> */}
         </div>
